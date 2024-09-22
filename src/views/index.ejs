@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <!-- <link rel="stylesheet" href="styles/main.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            /* position: absolute; */
+            bottom: 0;
+            width: 100%;
+        }
+
+        .file-upload-wrapper {
+            display: flex;
+            flex-direction: row;
+            /* position: relative; */
+            /* width: 250px; */
+        }
+
+        .button {
+            margin-top: 10px;
+        }
+
+        .file-upload-label {
+            margin-right: 5px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            /* width: 300px; */
+            margin: 0 auto;
+            /* Center the form on the page */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            margin-block: 10px;
+        }
+
+        .profile-picture-label {
+            margin-right: 5px;
+        }
+
+        .input {
+            margin-block: 10px;
+            padding-block: 5px;
+        }
+    </style>
+</head>
+<script>
+    const onFileUploadCall = async () => {
+        const file = document.getElementById("uploadFile").files[0];
+        console.log("file=====", file);
+        try {
+            const response = await fetch('http://localhost:8080/api/upload', {
+
+            })
+            console.log("response======", response);
+
+        } catch (error) {
+            console.log("error======", error);
+        }
+    }
+    const onProfileUpdateCall = async () => {
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const bio = document.getElementById("bio").value;
+        const profilePicture = document.getElementById("profilePicture").files[0];
+
+        console.log("profilePicture=-=-=-=-", profilePicture);
+        console.log("profilePicture=-=-=-=-path", profilePicture.path);
+
+        // Retrieve the userId from localStorage
+        const userId = localStorage.getItem('userId');
+        console.log("userId========", userId);
+
+        // const inputParams = {
+        //     "userId": userId,
+        //     "profileData": {
+        //         "firstName": firstName,
+        //         "lastName": lastName,
+        //         "bio": bio,
+        //         "profilePictureUrl": "www.google.com"
+        //     }
+        // }
+
+        const formData = new FormData();
+        formData.append('userId', userId);
+        formData.append('profileData[firstName]', firstName);
+        formData.append('profileData[lastName]', lastName);
+        formData.append('profileData[bio]', bio);
+        if (profilePicture) {
+            formData.append('profileData[profilePictureUrl]', profilePicture);
+        }
+
+        console.log("response=-=--=-formData", formData);
+
+        try {
+            const response = await fetch('http://localhost:8080/api/updateProfile', {
+                method: 'POST', // Use 'POST' as a string
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: formData, // Send FormData as the request body
+            });
+
+            console.log("response=-=--=-", response);
+
+            const parsedResponse = await response.json();
+
+            console.log("parsedResponse=======", parsedResponse);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    const onSignUpCall = async () => {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+
+        const inputParams = {
+            "username": username,
+            "password": password,
+            "email": email
+        }
+        console.log("inputParms======", inputParams);
+        try {
+            const response = await fetch('http://localhost:8080/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(inputParams)
+            })
+            const parsedResponse = await response.json()
+            console.log("inputParms======", parsedResponse);
+        } catch (error) {
+            console.log("error========", error);
+        }
+    }
+    const onLoginCall = async () => {
+        const username = document.getElementById('username-login').value;
+        const password = document.getElementById('password-login').value;
+        const inputParams = {
+            "username": username,
+            "password": password
+        }
+        try {
+            const response = await fetch('http://localhost:8080/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(inputParams)
+            })
+            const parsedResponse = await response.json()
+            console.log("response======", parsedResponse.user);
+            console.log("response======", parsedResponse.message);
+            console.log("response======", parsedResponse);
+            // Store the userId in localStorage
+            if (parsedResponse.user && parsedResponse.user.id) {
+                localStorage.setItem('userId', parsedResponse.user.id);
+            }
+        }
+        catch (error) {
+            console.log("error======", error);
+        }
+    }
+</script>
+
+<body>
+    <header>
+        <h1>
+            <%= heading %>
+        </h1>
+    </header>
+    <main>
+        <h2>
+            <%= subheading %>
+        </h2>
+        <p>
+            <%= content %>
+        </p>
+        <form class="form-container">
+            <input type="file" name="profileImage" id="uploadFile" />
+            <button type="submit" class="button" id="uploadFileButton" onclick="onFileUploadCall()">Upload File</button>
+        </form>
+
+        <form class="form-container">
+            <input type="text" name="enter username" placeholder="Enter username" class="input" id="username" />
+            <input type="text" name="enter password" placeholder="Enter password" class="input" id="password" />
+            <input type="text" name="enter email" placeholder="Enter email" class="input" id="email" />
+            <button type="button" class="button" id="signUpButton" onclick="onSignUpCall()">Sign Up</button>
+        </form>
+
+        <form class="form-container">
+            <input type="text" name="enter username" placeholder="Enter username" class="input" id="username-login" />
+            <input type="text" name="enter password" placeholder="Enter password" class="input" id="password-login" />
+            <button type="button" class="button" id="loginButton" onclick="onLoginCall()">Login</button>
+        </form>
+
+        <form class="form-container">
+            <input type="text" name="enter name" placeholder="Enter first name" class="input" id="firstName" />
+            <input type="text" name="enter name" placeholder="Enter last name" class="input" id="lastName" />
+            <input type="text" name="enter name" placeholder="Enter bio" class="input" id="bio" />
+            <div class="file-upload-wrapper">
+                <span class="file-upload-label">Upload profile picture</span>
+                <input type="file" name="profilePicture" id="profilePicture" />
+            </div>
+            <button type="button" class="button" id="profileUpdateButton" onclick="onProfileUpdateCall()">Update
+                Profile</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 My Website</p>
+    </footer>
+    <script src="scripts/main.js" defer></script>
+</body>
+
+</html>
