@@ -12,24 +12,24 @@ const { addExpense, getUserAllExpanse } = require('../controller/TransactionCont
 const router = express.Router();
 
 //post apis
-router.post('/register', userRegister)
-router.post('/login', userLogin)
-router.post('/getUserProfile', getUserProfile)
-router.post('/updateProfile', upload.single('profileImage'), updateProfileController)
-router.post('/addExpense', addExpense)
-router.post('/getUserAllExpanse', getUserAllExpanse)
+// router.post('/register', userRegister)
+// router.post('/login', userLogin)
+// router.post('/getUserProfile', getUserProfile)
+// router.post('/updateProfile', upload.single('profileImage'), updateProfileController)
+// router.post('/addExpense', addExpense)
+// router.post('/getUserAllExpanse', getUserAllExpanse)
 
 // get apis
-router.get('/getusers', usersController)
-router.get('/protected', authenticateToken)
-router.get('/', (req, res) => {
-    res.render('../views/index', {
-        title: 'Home Page',
-        heading: 'Welcome to My Website',
-        subheading: 'About This',
-        content: 'This is a basic EJS template that contains all the APIs'
-    });
-});
+// router.get('/getusers', usersController)
+// router.get('/protected', authenticateToken)
+// router.get('/', (req, res) => {
+//     res.render('../views/index', {
+//         title: 'Home Page',
+//         heading: 'Welcome to My Website',
+//         subheading: 'About This',
+//         content: 'This is a basic EJS template that contains all the APIs'
+//     });
+// });
 
 //export router
-module.exports = router;
+// module.exports = router;

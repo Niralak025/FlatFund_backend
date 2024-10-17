@@ -1,11 +1,12 @@
+require('dotenv').config()
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 
 //setup the configuration of cloudinary
 cloudinary.config({
-    cloud_name: 'demoapi-0',
-    api_key: '419847122881466',
-    api_secret: 'yJJK8VOChQ02mGtupr2oGRNv4vg'
+    cloud_name: process.env.IMAGE_UPLOAD_CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
 });
 
 const uploadOnCloudinary = async (localFilePath) => {
@@ -25,7 +26,7 @@ const uploadOnCloudinary = async (localFilePath) => {
         return response;
     } catch (error) {
 
-        console.error('Error uploading to Cloudinary:', error);
+        // console.error('Error uploading to Cloudinary:', error);
 
         // Remove the locally saved temporary file as the upload operation failed
         if (fs.existsSync(localFilePath)) {

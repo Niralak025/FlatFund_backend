@@ -3,7 +3,7 @@ const path = require("path");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, '../src/uploads')
+        cb(null, './src/uploads')
     },
     filename: function (req, file, cb) {
         const ext = path.extname(file.originalname);
@@ -14,9 +14,19 @@ const storage = multer.diskStorage({
     }
 })
 
+const fileFilter = (req, file, cb) => {
+    // Accept images only
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(new Error('Unsupported file type'), false); // Reject files that are not images
+    }
+};
+
 const upload = multer({
-    storage,
-    limits: { fileSize: 50 * 1024 * 1024 } // Increase file size limit to 50MB for file uploads
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 }, // 5MB file size limit
+    fileFilter: fileFilter
 })
 
 module.exports = { upload }

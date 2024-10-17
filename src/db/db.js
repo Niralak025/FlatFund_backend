@@ -1,14 +1,27 @@
-const mysql = require('mysql2/promise');
+const mysql = require('mysql2');
 
-//setup your database
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: '1234',
-    database: 'nodedemodatabase',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+// Create a connection to the database
+const connection = mysql.createConnection({
+    host: '127.0.0.1',  // Replace with your database host
+    user: 'root',  // Replace with your MySQL username
+    password: '',  // Replace with your MySQL password
+    database: 'flatfunddb'  // Replace with your database name
 });
 
-module.exports = pool;
+async function connectDatabase() {
+    // Connect to the database
+    connection.connect((error) => {
+        if (error) {
+            console.error('Error connecting to the database:', error);
+            return;
+        }
+        else {
+            console.log('Connected to the MySQL database!');
+        }
+    });
+}
+
+module.exports = {
+    connectDatabase,
+    connection
+};
