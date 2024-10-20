@@ -41,6 +41,11 @@ app.delete('/delete_transaction/:id', deleteExpanseById)
 //Get all users transactions 
 app.get('/gettransactions', getAllUsersExpanses)
 
+//Just for check
+app.get('/', (req, res) => {
+    res.status(200).json({ msg: 'Hello from backend' })
+})
+
 app.listen(PORT, () => {
     console.log(`server Started at ${PORT}`)
 })

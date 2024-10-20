@@ -2,7 +2,7 @@
   "name": "FlatFund_backend",
   "version": "0.0.1",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm run",
     "start": "nodemon index.js"

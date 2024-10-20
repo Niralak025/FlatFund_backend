@@ -2,10 +2,9 @@ const bcrypt = require('bcryptjs');
 const db = require('../db/db');
 const userTable = require('../models/User');
 const { uploadOnCloudinary } = require("../utils/cloudinary");
-const { getAllUsers } = require('../models/UsersModel');
 
 const userRegister = async (req, res) => {
-    // userTable
+    userTable
     // console.log("req.body===req", req.body);
     const { first_name, last_name, email, password } = req.body;
     // console.log("{ first_name, last_name, email, password }====", { first_name, last_name, email, password },req.file);
